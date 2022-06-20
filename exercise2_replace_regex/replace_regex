@@ -1,9 +1,0 @@
-class String
-  def replace_vowel_with_star
-    gsub(/[aeiou]/i , '*')
-  end
-end
-
-input = gets.chomp
-puts input.replace_vowel_with_star
-    
