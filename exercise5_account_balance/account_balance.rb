@@ -29,7 +29,8 @@ end
 account_one = Account.new("Rahul",2000)
 account_two = Account.new("Abhishek",3000)
 account_one.withdraw(200)
-puts ""
+puts
 account_two.deposit(200)
+puts account_one.to_s
 
   
