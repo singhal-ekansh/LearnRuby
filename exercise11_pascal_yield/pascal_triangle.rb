@@ -1,21 +1,43 @@
-class Pascal
-  def pascal_print (num_of_lines)
-    puts '1'
-    prev_line = []
-    (num_of_lines-1).times do
-      yield prev_line
-      prev_line.push(1)
-      prev_line.unshift(1)
-      next_line = prev_line.each_cons(2).to_a.map{ |element| element.inject(:+)}
-      prev_line = next_line
-    end  
+# Using Ruby version: ruby 2.7.1p83 (2020-03-31 revision a0c7c23c9c) [x86_64-linux]
+# Your Ruby code here
+class Integer
+  def factorial
+    self.zero? ? (1) : ((1..self).inject(:*))
   end
+  
 end
 
-Pascal.new.pascal_print(3) do |line|
-  print "1 "
-  line.to_a.each {|num| print "#{num} "}
-  puts '1'
-end  
+class PascalGenerator
+  attr_accessor :num_of_lines
+  def initialize(lines)
+    num_of_lines = lines
+  end
+  
+  def combination(row,col)
+    (row.factorial) / ((col.factorial) * ((row - col).factorial))
+  end
 
+  def generate
+    series = []
+    
+    (0...num_of_lines).each do |row|
+      row_entry = []
+      (0..row).each { |col| row_entry.push(combination(row,col)) }
+      series.push(row_entry)
+      
+    end
+    yield series if block_given?
+  end
+  
+end
 
+if ARGV.length.zero?
+  print 'Please provide an input'
+else
+  PascalGenerator.new(ARGV[0].to_i).generate do |series|
+    series.each do |line|
+      line.each { |num| print "#{num} " }
+      puts
+    end
+  end
+end
