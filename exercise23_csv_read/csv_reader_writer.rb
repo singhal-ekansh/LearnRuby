@@ -4,6 +4,7 @@ require 'csv'
 class Csvformatter
   def read_file
     input_file = CSV.read('input_data.csv', headers: true, header_converters: :symbol)
+    puts input_file
     output_file = CSV.open('output_data.csv', 'w')
     map_designation = Hash.new { |h, k| h[k] = [] }
 
