@@ -2,6 +2,7 @@
 # Your Ruby code here
 class Time
   @@day_count = 0
+  VALID_TIME_REGEXP =  /^([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]$/.freeze
   def str_to_seconds(time_in_string)
     time_array = time_in_string.split(':')
     hr = time_array[0].to_i
@@ -11,6 +12,8 @@ class Time
   end
 
   def add_time(time_array)
+    return 'Invalid 24-hour time value' if !time_array.all? VALID_TIME_REGEXP
+
     time_now_seconds = str_to_seconds(strftime('%H:%M:%S'))
     total_seconds = time_array.inject(0) { |memo, time| memo + str_to_seconds(time) }
     new_time = self + total_seconds - time_now_seconds
@@ -20,7 +23,7 @@ class Time
 
   def to_s
     if @@day_count.positive?
-      "#{@@day_count} day & #{strftime('%H:%M:%S')}"
+      "#{@@day_count} #{@@day_count>1 ? 'days' : 'day'} & #{strftime('%H:%M:%S')}"
     else
       strftime('%H:%M:%S')
     end
@@ -30,11 +33,5 @@ end
 if ARGV.length.zero?
   puts 'Please provide an input'
 else
-  VALID_TIME_REGEXP =  /^([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]$/.freeze
-  time_array = ARGV
-  if !time_array.all? VALID_TIME_REGEXP
-    puts 'Invalid 24-hour time value'.inspect
-  else
-    puts Time.new.add_time(time_array).inspect
-  end
+  puts Time.new.add_time(ARGV).inspect
 end
